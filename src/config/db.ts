@@ -39,3 +39,5 @@ export const closeDB = async () => {
     console.error('Error closing database connection:', error);
   }
 };
+
+// End of DB Configuration Module
