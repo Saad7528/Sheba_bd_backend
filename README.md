@@ -36,3 +36,4 @@ A Node.js + Express.js + Mongoose + TypeScript backend service for a premium Doc
 - Mongoose (MongoDB ODM)
 - TypeScript
 - Dotenv (Environment loader)
+- Cors (Cross-origin resources support)
