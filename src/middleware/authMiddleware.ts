@@ -45,3 +45,5 @@ export const requireRole = (roles: Array<'patient' | 'doctor' | 'admin'>) => {
     next();
   };
 };
+
+// End of Auth Middleware Module
