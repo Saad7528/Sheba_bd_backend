@@ -37,3 +37,4 @@ A Node.js + Express.js + Mongoose + TypeScript backend service for a premium Doc
 - TypeScript
 - Dotenv (Environment loader)
 - Cors (Cross-origin resources support)
+- Bcryptjs (Password hashing helper)
