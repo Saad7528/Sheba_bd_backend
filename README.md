@@ -28,3 +28,10 @@ A Node.js + Express.js + Mongoose + TypeScript backend service for a premium Doc
    ```bash
    npm run dev
    ```
+
+
+## Core Technologies
+- Node.js
+- Express.js
+- Mongoose (MongoDB ODM)
+- TypeScript
