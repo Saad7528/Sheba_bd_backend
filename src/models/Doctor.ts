@@ -52,3 +52,5 @@ const DoctorSchema: Schema = new Schema(
 );
 
 export default mongoose.model<IDoctor>('Doctor', DoctorSchema);
+
+// End of Doctor Schema Definition
