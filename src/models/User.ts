@@ -19,3 +19,5 @@ const UserSchema: Schema = new Schema(
 );
 
 export default mongoose.model<IUser>('User', UserSchema);
+
+// End of User Schema Definition
