@@ -56,3 +56,5 @@ export const getWeeklyAppointments = async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error generating weekly stats', error: error.message });
   }
 };
+
+// End of Statistics Computation Controller
