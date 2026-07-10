@@ -156,4 +156,24 @@ export const addDoctorReview = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({ message: 'Error adding review', error: error.message });
   }
 };
+
+export const deleteDoctor = async (req: AuthRequest, res: Response) => {
+  try {
+    const doctorId = req.params.id;
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor profile not found' });
+    }
+
+    await Doctor.findByIdAndDelete(doctorId);
+
+    return res.json({
+      message: 'Doctor profile deleted successfully'
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: 'Error deleting doctor profile', error: error.message });
+  }
+};
+
 import mongoose from 'mongoose';
+
