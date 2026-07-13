@@ -12,7 +12,7 @@ const UserSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     role: { type: String, enum: ['patient', 'doctor', 'admin'], default: 'patient' }
   },
   { timestamps: true }
