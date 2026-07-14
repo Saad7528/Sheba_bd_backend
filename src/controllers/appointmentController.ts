@@ -148,3 +148,44 @@ export const cancelAppointment = async (req: AuthRequest, res: Response) => {
     return res.status(500).json({ message: 'Error deleting appointment', error: error.message });
   }
 };
+
+export const addPrescription = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { diagnosis, medicines, advice } = req.body;
+
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const appointment = await Appointment.findById(id);
+    if (!appointment) {
+      return res.status(404).json({ message: 'Appointment not found' });
+    }
+
+    // Check permissions: only admin or the doctor assigned to this appointment can prescribe
+    if (req.user.role === 'doctor') {
+      const doctorProfile = await Doctor.findOne({ userId: req.user.id });
+      if (!doctorProfile || appointment.doctorId.toString() !== doctorProfile._id.toString()) {
+        return res.status(403).json({ message: 'Access denied. You can only prescribe for your own appointments.' });
+      }
+    } else if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Only doctors and admins can write prescriptions.' });
+    }
+
+    appointment.prescription = {
+      diagnosis: diagnosis || '',
+      medicines: medicines || '',
+      advice: advice || ''
+    };
+
+    await appointment.save();
+
+    return res.json({
+      message: 'Prescription saved successfully',
+      appointment
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: 'Error saving prescription', error: error.message });
+  }
+};

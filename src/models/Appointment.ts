@@ -13,6 +13,11 @@ export interface IAppointment extends Document {
   visitingFee: number;    // Snapshot of the fee at the time of booking in BDT
   status: 'pending' | 'approved' | 'cancelled';
   notes?: string;
+  prescription?: {
+    diagnosis: string;
+    medicines: string;
+    advice: string;
+  };
   createdAt: Date;
 }
 
@@ -29,7 +34,12 @@ const AppointmentSchema: Schema = new Schema(
     timeSlot: { type: String, required: true },
     visitingFee: { type: Number, required: true },
     status: { type: String, enum: ['pending', 'approved', 'cancelled'], default: 'pending' },
-    notes: { type: String }
+    notes: { type: String },
+    prescription: {
+      diagnosis: { type: String },
+      medicines: { type: String },
+      advice: { type: String }
+    }
   },
   { timestamps: true }
 );
