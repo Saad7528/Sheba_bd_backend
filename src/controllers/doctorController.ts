@@ -165,6 +165,11 @@ export const deleteDoctor = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: 'Doctor profile not found' });
     }
 
+    // Enforce ownership: only admin or the doctor who owns the profile can delete it
+    if (req.user?.role !== 'admin' && doctor.userId?.toString() !== req.user?.id) {
+      return res.status(403).json({ message: 'Forbidden. You do not have permission to delete this profile.' });
+    }
+
     await Doctor.findByIdAndDelete(doctorId);
 
     return res.json({
@@ -172,6 +177,42 @@ export const deleteDoctor = async (req: AuthRequest, res: Response) => {
     });
   } catch (error: any) {
     return res.status(500).json({ message: 'Error deleting doctor profile', error: error.message });
+  }
+};
+
+export const updateDoctor = async (req: AuthRequest, res: Response) => {
+  try {
+    const doctorId = req.params.id;
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ message: 'Doctor profile not found' });
+    }
+
+    // Enforce ownership: only admin or the doctor who owns the profile can update it
+    if (req.user?.role !== 'admin' && doctor.userId?.toString() !== req.user?.id) {
+      return res.status(403).json({ message: 'Forbidden. You do not have permission to update this profile.' });
+    }
+
+    const { name, specialty, degrees, visitingFee, location, chamber, schedule, imageUrl, description } = req.body;
+
+    if (name) doctor.name = name;
+    if (specialty) doctor.specialty = specialty;
+    if (degrees) doctor.degrees = degrees;
+    if (visitingFee !== undefined) doctor.visitingFee = Number(visitingFee);
+    if (location) doctor.location = location;
+    if (chamber) doctor.chamber = chamber;
+    if (schedule) doctor.schedule = Array.isArray(schedule) ? schedule : [schedule];
+    if (imageUrl) doctor.imageUrl = imageUrl;
+    if (description) doctor.description = description;
+
+    await doctor.save();
+
+    return res.json({
+      message: 'Doctor profile updated successfully',
+      doctor
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: 'Error updating doctor profile', error: error.message });
   }
 };
 
